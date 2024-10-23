@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CollisionSparks : MonoBehaviour
 {
+    public AudioClip BounceSound;
+
     public GameObject SparksPrefab;
     private void OnCollisionEnter(Collision coll)
     {
@@ -11,9 +13,15 @@ public class CollisionSparks : MonoBehaviour
         Vector3 point = coll.GetContact(0).point;
 
         // instantiate the spark prefab there
-        Instantiate(SparksPrefab, point, Quaternion.identity);
+        GameObject sparks = Instantiate(SparksPrefab, point, Quaternion.identity);
+
+        // shake the camera
+        CameraEffects.Shake(.4f, true);
+
+        //play the sound effect
+        AudioSource.PlayClipAtPoint(BounceSound, point);
 
         // destroy the sparks after a second
-        Destroy(SparksPrefab, 1.0f);
+        Destroy(sparks, 1.0f);
     }
 }
